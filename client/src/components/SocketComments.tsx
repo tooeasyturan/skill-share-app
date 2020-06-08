@@ -10,10 +10,11 @@ interface User {
   meeting: string;
 }
 
-const SocketComments = ({ values, meetingInfo, addComment }) => {
-  const [comment, setComment] = useState("");
+const SocketComments = ({ values, state, addComment, dispatch }) => {
+  const { meetingInfo, comment } = state;
 
   socket.on("comment", (data) => {
+    console.log("data client", data);
     const newComment = {
       name: data.name,
       comment: data.comment,
@@ -29,13 +30,14 @@ const SocketComments = ({ values, meetingInfo, addComment }) => {
     };
     socket.emit("new-user", values.presenter);
     socket.emit("send", comment);
+    console.log("NEW COMMENT", meetingInfo);
     addComment(newComment);
-    setComment("");
   };
 
   const handleCommentChange = (e: any) => {
     e.preventDefault();
-    setComment(e.target.value);
+    console.log(e.target.value);
+    dispatch({ type: "add-comment", payload: e.target.value });
   };
 
   return (

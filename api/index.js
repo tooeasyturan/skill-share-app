@@ -39,12 +39,15 @@ app.get("/test", (req, res) => {
 const users = {};
 
 io.on("connection", (socket) => {
+  console.log(socket);
   socket.on("new-user", (name) => {
+    console.log("new user", name);
     users[socket.id] = name;
     socket.broadcast.emit("user-connected", name);
   });
 
   socket.on("send", (comment) => {
+    console.log("new comment", comment);
     socket.broadcast.emit("comment", {
       comment: comment,
       name: users[socket.id],

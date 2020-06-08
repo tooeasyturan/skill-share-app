@@ -7,9 +7,10 @@ import SocketComments from "./SocketComments";
 const FormView = ({
   values,
   handleChange,
-  meetingInfo,
+  state,
   handleFormSubmit,
   addComment,
+  dispatch,
 }: any) => {
   return (
     <div className='App'>
@@ -28,14 +29,14 @@ const FormView = ({
             />
           </span>
         </div>
-        {meetingInfo.title !== "" ? (
+        {state.meetingInfo.title !== "" ? (
           <div>
             <div>
-              <h1>Title: {meetingInfo.title}</h1>
+              <h1>Title: {state.meetingInfo.title}</h1>
               <p>
-                By: <strong>{meetingInfo.presenter}</strong>
+                By: <strong>{state.meetingInfo.presenter}</strong>
               </p>
-              <p>Summary: {meetingInfo.summary}</p>
+              <p>Summary: {state.meetingInfo.summary}</p>
             </div>
             <div>
               {/* <Comments
@@ -45,8 +46,9 @@ const FormView = ({
               /> */}
               <SocketComments
                 values={values}
-                meetingInfo={meetingInfo}
+                state={state}
                 addComment={addComment}
+                dispatch={dispatch}
               />
             </div>
           </div>
