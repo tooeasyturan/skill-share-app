@@ -1,12 +1,7 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import io from "socket.io-client";
-
-// const socket = io("http://localhost:8000/", {
-//   transports: ["websockets", "polling"],
-// });
-
 const socket = io("http://localhost:8000/");
 
 interface User {
@@ -26,18 +21,12 @@ const SocketComments = ({ values, meetingInfo, addComment }) => {
     addComment(newComment);
   });
 
-  // socket.on("user-connected", (name) => {
-  //   console.log(`${name} connected`);
-  // });
-
   const handleCommentSubmit = (e: any) => {
     e.preventDefault();
     const newComment = {
       name: values.presenter,
       comment: comment,
     };
-    // socket.emit("username", values.presenter)
-    console.log("name to emit", values.presenter);
     socket.emit("new-user", values.presenter);
     socket.emit("send", comment);
     addComment(newComment);
