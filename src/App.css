@@ -1,0 +1,22 @@
+/** @format */
+
+.App {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+form {
+  width: 400px;
+  display: inline-block;
+}
+
+label,
+input {
+  width: 100%;
+  display: block;
+}
+
+button {
+  display: block;
+}
