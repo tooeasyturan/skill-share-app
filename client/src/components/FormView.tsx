@@ -46,9 +46,9 @@ const FormView = ({
               /> */}
               <SocketComments
                 values={values}
-                state={state}
+                // state={state}
                 addComment={addComment}
-                dispatch={dispatch}
+                // dispatch={dispatch}
               />
             </div>
           </div>

@@ -1,10 +1,11 @@
 /** @format */
 
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import FormView from "./FormView";
 import useForm from "../useForm";
 import produce from "immer";
 import { MeetingProps } from "../types.d";
+import { MeetingContext } from "./MeetingContext";
 
 const DEFAULT_MEETING = {
   title: "",
@@ -13,47 +14,13 @@ const DEFAULT_MEETING = {
   comments: [],
 };
 
-const initialState = {
-  meetingInfo: {
-    title: "",
-    presenter: "",
-    summary: "",
-    comments: [],
-  },
-  comment: "",
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "get-meetings":
-      return { ...state, meetingInfo: action.payload };
-    case "add-meeting":
-      return { ...state, meetingInfo: action.payload };
-    case "update-comments":
-      return produce(state, (draft) => {
-        console.log("draft comment", draft.comment);
-        draft.meetingInfo.comments = action.payload;
-        draft.comment = "";
-        console.log("draft comment after", draft.comment);
-      });
-    case "add-comment":
-      console.log("added comment", action.payload);
-      console.log("updated state", state);
-      return { ...state, comment: action.payload };
-    case "clear-comment":
-      return { ...state, comment: "" };
-    default:
-      return state;
-  }
-}
-
 const MeetingInfo = () => {
   const { values, handleChange, handleFormSubmit } = useForm(
     DEFAULT_MEETING,
     submit
   );
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { state, dispatch } = useContext(MeetingContext);
 
   function submit() {
     dispatch({ type: "add-meeting", payload: values });

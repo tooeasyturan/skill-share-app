@@ -1,7 +1,8 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import io from "socket.io-client";
+import { MeetingContext } from "./MeetingContext";
 const socket = io("http://localhost:8000/");
 
 interface User {
@@ -10,7 +11,9 @@ interface User {
   meeting: string;
 }
 
-const SocketComments = ({ values, state, addComment, dispatch }) => {
+const SocketComments = ({ values, addComment }) => {
+  const { state, dispatch } = useContext(MeetingContext);
+  console.log("STATE!!!", state);
   const { meetingInfo, comment } = state;
 
   socket.on("comment", (data) => {
@@ -30,13 +33,11 @@ const SocketComments = ({ values, state, addComment, dispatch }) => {
     };
     socket.emit("new-user", values.presenter);
     socket.emit("send", comment);
-    console.log("NEW COMMENT", meetingInfo);
     addComment(newComment);
   };
 
   const handleCommentChange = (e: any) => {
     e.preventDefault();
-    console.log(e.target.value);
     dispatch({ type: "add-comment", payload: e.target.value });
   };
 
