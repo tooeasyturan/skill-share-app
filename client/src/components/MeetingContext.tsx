@@ -1,9 +1,12 @@
 /** @format */
 
-import React, { useReducer, createContext } from "react";
 import produce from "immer";
+import React, { createContext, useReducer } from "react";
+import { MeetingAction, MeetingContextType, MeetingState } from "../types.d";
 
-export const MeetingContext = createContext(null);
+export const MeetingContext = createContext<MeetingContextType | undefined>(
+  undefined
+);
 
 const initialState = {
   meetingInfo: {
@@ -15,7 +18,7 @@ const initialState = {
   comment: "",
 };
 
-function reducer(state, action) {
+function reducer(state: MeetingState, action: MeetingAction): MeetingState {
   switch (action.type) {
     case "get-meetings":
       return { ...state, meetingInfo: action.payload };
@@ -23,14 +26,10 @@ function reducer(state, action) {
       return { ...state, meetingInfo: action.payload };
     case "update-comments":
       return produce(state, (draft) => {
-        console.log("draft comment", draft.comment);
         draft.meetingInfo.comments = action.payload;
         draft.comment = "";
-        console.log("draft comment after", draft.comment);
       });
     case "add-comment":
-      console.log("added comment", action.payload);
-      console.log("updated state", state);
       return { ...state, comment: action.payload };
     case "clear-comment":
       return { ...state, comment: "" };
@@ -39,7 +38,7 @@ function reducer(state, action) {
   }
 }
 
-export const MeetingProvider = (props) => {
+export const MeetingProvider: React.FC<MeetingState> = (props): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (

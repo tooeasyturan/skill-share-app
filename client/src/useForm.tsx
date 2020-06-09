@@ -1,9 +1,15 @@
 /** @format */
 
 import { useState } from "react";
-import { MeetingProps } from "./types.d";
+import { MeetingInfo } from "./types.d";
 
-const useForm = (formInput: MeetingProps, callback: () => void) => {
+type FormReturn = {
+  values: MeetingInfo;
+  handleChange: (e: any) => void;
+  handleFormSubmit: (e: any) => void;
+};
+
+const useForm = (formInput: MeetingInfo, callback: () => void): FormReturn => {
   const [values, setValues] = useState(formInput);
 
   const handleChange = (e: any) => {

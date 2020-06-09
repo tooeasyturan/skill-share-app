@@ -1,10 +1,9 @@
 /** @format */
 
-import React, { useContext, useEffect, useReducer } from "react";
-import FormView from "./FormView";
+import React, { useContext, useEffect } from "react";
+import { Comments } from "../types.d";
 import useForm from "../useForm";
-import produce from "immer";
-import { MeetingProps } from "../types.d";
+import FormView from "./FormView";
 import { MeetingContext } from "./MeetingContext";
 
 const DEFAULT_MEETING = {
@@ -37,11 +36,14 @@ const MeetingInfo = () => {
     return JSON.parse(localStorage.getItem("meeting"));
   };
 
-  const addComment = (comment) => {
+  const addComment = (comment: Comments) => {
     let prevComments = state.meetingInfo.comments;
     const meetingFromLocalStorage = getMeeting();
 
-    const updateLocalStorage = {
+    const updateLocalStorage: {
+      meetingFromLocalStorage: string;
+      comments: Comments[];
+    } = {
       ...meetingFromLocalStorage,
       comments: [...prevComments, comment],
     };
@@ -54,10 +56,9 @@ const MeetingInfo = () => {
     <FormView
       values={values}
       handleChange={handleChange}
-      state={state}
       handleFormSubmit={handleFormSubmit}
       addComment={addComment}
-      dispatch={dispatch}
+      state={state}
     />
   );
 };

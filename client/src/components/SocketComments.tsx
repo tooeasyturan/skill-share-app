@@ -1,31 +1,34 @@
 /** @format */
 
-import React, { useState, useContext } from "react";
+import React, { FormEvent, useContext } from "react";
 import io from "socket.io-client";
+import { MeetingInfo } from "../types.d";
 import { MeetingContext } from "./MeetingContext";
 const socket = io("http://localhost:8000/");
 
-interface User {
+export type Comments = {
   name: string;
   comment: string;
-  meeting: string;
-}
+};
 
-const SocketComments = ({ values, addComment }) => {
+type CommentsProps = {
+  values: MeetingInfo;
+  addComment: (comment: Comments) => void;
+};
+
+const SocketComments = ({ values, addComment }: CommentsProps) => {
   const { state, dispatch } = useContext(MeetingContext);
-  console.log("STATE!!!", state);
   const { meetingInfo, comment } = state;
 
   socket.on("comment", (data) => {
-    console.log("data client", data);
-    const newComment = {
+    const newComment: Comments = {
       name: data.name,
       comment: data.comment,
     };
     addComment(newComment);
   });
 
-  const handleCommentSubmit = (e: any) => {
+  const handleCommentSubmit = (e: FormEvent) => {
     e.preventDefault();
     const newComment = {
       name: values.presenter,
@@ -43,7 +46,7 @@ const SocketComments = ({ values, addComment }) => {
 
   return (
     <div>
-      {meetingInfo.comments.map((comment: any) => {
+      {meetingInfo.comments.map((comment: Comments) => {
         return (
           <div key={Math.random()}>
             <strong>{comment.name}: </strong>

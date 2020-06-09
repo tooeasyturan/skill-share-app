@@ -1,8 +1,16 @@
 /** @format */
 
 import React from "react";
-import Comments from "./Comments";
 import SocketComments from "./SocketComments";
+import { MeetingInfo, MeetingState, Comments } from "../types.d";
+
+type FormViewProps = {
+  values: MeetingInfo;
+  state: MeetingState;
+  handleChange: (e: any) => void;
+  handleFormSubmit: (e: any) => void;
+  addComment: (comment: Comments) => void;
+};
 
 const FormView = ({
   values,
@@ -10,8 +18,7 @@ const FormView = ({
   state,
   handleFormSubmit,
   addComment,
-  dispatch,
-}: any) => {
+}: FormViewProps) => {
   return (
     <div className='App'>
       <form action=''>
@@ -39,17 +46,7 @@ const FormView = ({
               <p>Summary: {state.meetingInfo.summary}</p>
             </div>
             <div>
-              {/* <Comments
-                values={values}
-                meetingInfo={meetingInfo}
-                addComment={addComment}
-              /> */}
-              <SocketComments
-                values={values}
-                // state={state}
-                addComment={addComment}
-                // dispatch={dispatch}
-              />
+              <SocketComments values={values} addComment={addComment} />
             </div>
           </div>
         ) : (
