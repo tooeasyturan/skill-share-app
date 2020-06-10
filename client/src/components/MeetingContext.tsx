@@ -39,13 +39,13 @@ function reducer(state: MeetingState, action: MeetingAction): MeetingState {
       return { ...state, meetingInfo: action.payload };
     case "delete-meeting":
       return initialState;
+    case "add-comment":
+      return { ...state, comment: action.payload };
     case "update-comments":
       return produce(state, (draft) => {
         draft.meetingInfo.comments = action.payload;
         draft.comment = "";
       });
-    case "add-comment":
-      return { ...state, comment: action.payload };
     case "clear-comment":
       return { ...state, comment: "" };
     default:
