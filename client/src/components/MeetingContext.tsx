@@ -2,11 +2,24 @@
 
 import produce from "immer";
 import React, { createContext, useReducer } from "react";
-import { MeetingAction, MeetingContextType, MeetingState } from "../types.d";
+import { MeetingInfo, MeetingState } from "../types.d";
 
 export const MeetingContext = createContext<MeetingContextType | undefined>(
   undefined
 );
+
+type MeetingContextType = {
+  state: MeetingState;
+  dispatch: React.Dispatch<MeetingAction>;
+};
+
+export type MeetingAction =
+  | { type: "get-meetings"; payload: MeetingInfo }
+  | { type: "add-meeting"; payload: MeetingInfo }
+  | { type: "delete-meeting"; payload: any }
+  | { type: "update-comments"; payload: any }
+  | { type: "add-comment"; payload: string }
+  | { type: "clear-comment"; payload: string };
 
 const initialState = {
   meetingInfo: {
@@ -24,6 +37,8 @@ function reducer(state: MeetingState, action: MeetingAction): MeetingState {
       return { ...state, meetingInfo: action.payload };
     case "add-meeting":
       return { ...state, meetingInfo: action.payload };
+    case "delete-meeting":
+      return initialState;
     case "update-comments":
       return produce(state, (draft) => {
         draft.meetingInfo.comments = action.payload;

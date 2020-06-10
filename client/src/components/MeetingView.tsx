@@ -1,15 +1,15 @@
 /** @format */
 
 import React from "react";
-import SocketComments from "./SocketComments";
-import { MeetingInfo, MeetingState, Comments } from "../types.d";
+import { MeetingInfo, MeetingState } from "../types.d";
+import AddComment from "./AddComment";
+import DeleteMeeting from "./DeleteMeeting";
 
-type FormViewProps = {
+type MeetingViewProps = {
   values: MeetingInfo;
   state: MeetingState;
   handleChange: (e: any) => void;
   handleFormSubmit: (e: any) => void;
-  addComment: (comment: Comments) => void;
 };
 
 const FormView = ({
@@ -17,8 +17,9 @@ const FormView = ({
   handleChange,
   state,
   handleFormSubmit,
-  addComment,
-}: FormViewProps) => {
+}: MeetingViewProps) => {
+  const { title, presenter, summary } = state.meetingInfo;
+
   return (
     <div className='App'>
       <form action=''>
@@ -36,17 +37,17 @@ const FormView = ({
             />
           </span>
         </div>
-        {state.meetingInfo.title !== "" ? (
+        {title !== "" ? (
           <div>
             <div>
-              <h1>Title: {state.meetingInfo.title}</h1>
+              <h1>Title: {title}</h1> <DeleteMeeting />
               <p>
-                By: <strong>{state.meetingInfo.presenter}</strong>
+                By: <strong>{presenter}</strong>
               </p>
-              <p>Summary: {state.meetingInfo.summary}</p>
+              <p>Summary: {summary}</p>
             </div>
             <div>
-              <SocketComments values={values} addComment={addComment} />
+              <AddComment values={values} />
             </div>
           </div>
         ) : (

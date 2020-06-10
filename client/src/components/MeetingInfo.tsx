@@ -1,10 +1,10 @@
 /** @format */
 
 import React, { useContext, useEffect } from "react";
-import { Comments } from "../types.d";
 import useForm from "../useForm";
-import FormView from "./FormView";
+import MeetingView from "./MeetingView";
 import { MeetingContext } from "./MeetingContext";
+import { getMeeting } from "./handleLocalStorage";
 
 const DEFAULT_MEETING = {
   title: "",
@@ -26,38 +26,17 @@ const MeetingInfo = () => {
   }
 
   useEffect(() => {
-    const meeting = getMeeting();
+    const meeting = getMeeting("meeting");
     if (meeting) {
       dispatch({ type: "get-meetings", payload: meeting });
     }
   }, []);
 
-  const getMeeting = () => {
-    return JSON.parse(localStorage.getItem("meeting"));
-  };
-
-  const addComment = (comment: Comments) => {
-    let prevComments = state.meetingInfo.comments;
-    const meetingFromLocalStorage = getMeeting();
-
-    const updateLocalStorage: {
-      meetingFromLocalStorage: string;
-      comments: Comments[];
-    } = {
-      ...meetingFromLocalStorage,
-      comments: [...prevComments, comment],
-    };
-
-    localStorage.setItem("meeting", JSON.stringify(updateLocalStorage));
-    dispatch({ type: "update-comments", payload: [...prevComments, comment] });
-  };
-
   return (
-    <FormView
+    <MeetingView
       values={values}
       handleChange={handleChange}
       handleFormSubmit={handleFormSubmit}
-      addComment={addComment}
       state={state}
     />
   );
