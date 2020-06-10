@@ -1,7 +1,7 @@
 /** @format */
 
 import { useState } from "react";
-import { MeetingInfo } from "./types.d";
+import { MeetingInfo } from "../types.d";
 
 type FormReturn = {
   values: MeetingInfo;

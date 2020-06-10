@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useContext, useEffect } from "react";
-import useForm from "../useForm";
+import useForm from "./useForm";
 import MeetingView from "./MeetingView";
 import { MeetingContext } from "./MeetingContext";
 import { getMeeting } from "./handleLocalStorage";
