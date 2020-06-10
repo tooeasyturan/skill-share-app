@@ -21,21 +21,18 @@ const AddComment = ({ values }: CommentsProps) => {
   const { meetingInfo, comment } = state;
 
   socket.on("comment", (data) => {
-    addComment(newComment(data.name, data.comment));
+    addComment(data.name, data.comment);
   });
-
-  const newComment = (name: string, comment: string) => {
-    return { name, comment };
-  };
 
   const handleCommentSubmit = (e: FormEvent) => {
     e.preventDefault();
     socket.emit("new-user", values.presenter);
     socket.emit("send", comment);
-    addComment(newComment(values.presenter, comment));
+    addComment(values.presenter, comment);
   };
 
-  const addComment = (comment: Comments) => {
+  const addComment = (name: string, comment: string) => {
+    const newComment = { name: name, comment: comment };
     let prevComments = state.meetingInfo.comments;
     const meetingFromLocalStorage = getMeeting("meeting");
 
@@ -44,12 +41,15 @@ const AddComment = ({ values }: CommentsProps) => {
       comments: Comments[];
     } = {
       ...meetingFromLocalStorage,
-      comments: [...prevComments, comment],
+      comments: [...prevComments, newComment],
     };
 
     localStorage.setItem("meeting", JSON.stringify(updateLocalStorage));
     // setMeeting("meeting", updateLocalStorage);
-    dispatch({ type: "update-comments", payload: [...prevComments, comment] });
+    dispatch({
+      type: "update-comments",
+      payload: [...prevComments, newComment],
+    });
   };
 
   return (
