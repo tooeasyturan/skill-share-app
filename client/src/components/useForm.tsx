@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MeetingInfo } from "../types.d";
+import { writeMeeting } from "../services/firebase";
 
 type FormReturn = {
   values: MeetingInfo;
@@ -9,7 +10,7 @@ type FormReturn = {
   handleFormSubmit: (e: any) => void;
 };
 
-const useForm = (formInput: MeetingInfo, callback: () => void): FormReturn => {
+const useForm = (formInput: MeetingInfo, callback): FormReturn => {
   const [values, setValues] = useState(formInput);
 
   const handleChange = (e: any) => {
@@ -19,7 +20,9 @@ const useForm = (formInput: MeetingInfo, callback: () => void): FormReturn => {
 
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
+
     localStorage.setItem("meeting", JSON.stringify(values));
+    writeMeeting(values);
     callback();
     setValues(formInput);
   };

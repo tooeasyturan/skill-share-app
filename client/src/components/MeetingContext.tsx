@@ -14,7 +14,7 @@ type MeetingContextType = {
 };
 
 export type MeetingAction =
-  | { type: "get-meetings"; payload: MeetingInfo }
+  | { type: "get-meeting"; payload: MeetingInfo }
   | { type: "add-meeting"; payload: MeetingInfo }
   | { type: "delete-meeting"; payload: any }
   | { type: "update-comments"; payload: any }
@@ -33,7 +33,7 @@ const initialState = {
 
 function reducer(state: MeetingState, action: MeetingAction): MeetingState {
   switch (action.type) {
-    case "get-meetings":
+    case "get-meeting":
       return { ...state, meetingInfo: action.payload };
     case "add-meeting":
       return { ...state, meetingInfo: action.payload };

@@ -5,6 +5,7 @@ import io from "socket.io-client";
 import { MeetingInfo } from "../types.d";
 import { getMeeting } from "./handleLocalStorage";
 import { MeetingContext } from "./MeetingContext";
+import { writeComment } from "../services/firebase";
 const socket = io("http://localhost:8000/");
 
 export type Comments = {
@@ -33,7 +34,7 @@ const AddComment = ({ values }: CommentsProps) => {
 
   const addComment = (name: string, comment: string) => {
     const newComment = { name: name, comment: comment };
-    let prevComments = state.meetingInfo.comments;
+    let prevComments = meetingInfo.comments;
     const meetingFromLocalStorage = getMeeting("meeting");
 
     const updateLocalStorage: {
@@ -45,6 +46,7 @@ const AddComment = ({ values }: CommentsProps) => {
     };
 
     localStorage.setItem("meeting", JSON.stringify(updateLocalStorage));
+    writeComment(newComment);
     // setMeeting("meeting", updateLocalStorage);
     dispatch({
       type: "update-comments",

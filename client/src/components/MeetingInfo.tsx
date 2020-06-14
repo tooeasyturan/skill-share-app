@@ -1,10 +1,17 @@
 /** @format */
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useForm from "./useForm";
 import MeetingView from "./MeetingView";
 import { MeetingContext } from "./MeetingContext";
 import { getMeeting } from "./handleLocalStorage";
+import { readMeeting, queryMeeting } from "../services/firebase";
+
+declare global {
+  interface Window {
+    meetings: any;
+  }
+}
 
 const DEFAULT_MEETING = {
   title: "",
@@ -21,16 +28,29 @@ const MeetingInfo = () => {
 
   const { state, dispatch } = useContext(MeetingContext);
 
+  const [meetings, setMeetings] = useState([]);
+
   function submit() {
     dispatch({ type: "add-meeting", payload: values });
   }
 
   useEffect(() => {
     const meeting = getMeeting("meeting");
+
+    firebaseMeeting();
+
     if (meeting) {
-      dispatch({ type: "get-meetings", payload: meeting });
+      dispatch({ type: "get-meeting", payload: meeting });
     }
   }, []);
+
+  const firebaseMeeting = async () => {
+    const data = await queryMeeting();
+    setMeetings(data);
+  };
+
+  // window.meetings = window.meetings;
+  (window as any).meetings = meetings;
 
   return (
     <MeetingView
