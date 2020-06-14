@@ -6,6 +6,8 @@ import MeetingView from "./MeetingView";
 import { MeetingContext } from "./MeetingContext";
 import { getMeeting } from "./handleLocalStorage";
 import { readMeeting, queryMeeting } from "../services/firebase";
+import MeetingsTable from "./MeetingsTable";
+import { Link } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -29,6 +31,7 @@ const MeetingInfo = () => {
   const { state, dispatch } = useContext(MeetingContext);
 
   const [meetings, setMeetings] = useState([]);
+  const [showAll, setShowAll] = useState(false);
 
   function submit() {
     dispatch({ type: "add-meeting", payload: values });
@@ -52,13 +55,42 @@ const MeetingInfo = () => {
   // window.meetings = window.meetings;
   (window as any).meetings = meetings;
 
+  // const handleClick = (e) => {
+  //   const meeting = meetings.find((meeting) => meeting[0] === e.target.id);
+  //   console.log("clicked", meeting);
+  // };
+
+  const displayMeetings = meetings.map((meeting) => {
+    return (
+      <MeetingsTable
+        key={meeting[0]}
+        id={meeting[0]}
+        meeting={meeting[1]}
+        // handleClick={handleClick}
+      />
+    );
+  });
+
   return (
-    <MeetingView
-      values={values}
-      handleChange={handleChange}
-      handleFormSubmit={handleFormSubmit}
-      state={state}
-    />
+    <div>
+      {showAll ? (
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Presenter</th>
+            <th>Summary</th>
+          </tr>
+          {displayMeetings}
+        </table>
+      ) : (
+        <MeetingView
+          values={values}
+          handleChange={handleChange}
+          handleFormSubmit={handleFormSubmit}
+          state={state}
+        />
+      )}
+    </div>
   );
 };
 

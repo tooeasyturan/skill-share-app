@@ -2,27 +2,22 @@
 
 import React from "react";
 import "./App.css";
-// import { DB_CONFIG } from "./config/firebase";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
 import firebase from "firebase";
 import app from "./config/firebase";
 import MeetingInfo from "./components/MeetingInfo";
 import { MeetingProvider } from "./components/MeetingContext";
-
-// let db = firebase.database();
-
-// function writeData() {
-//   db.ref("meetings").set({
-//     title: "Test Meeting Title3",
-//     name: "Bob",
-//   });
-// }
-
-// writeData();
+import Meeting from "./components/Meeting";
 
 function App() {
   return (
     <MeetingProvider>
-      <MeetingInfo />
+      <Router>
+        <Route exact path='/' component={MeetingInfo} />
+        <Route exact path='/:id' component={Meeting} />
+        {/* <MeetingInfo /> */}
+      </Router>
     </MeetingProvider>
   );
 }
