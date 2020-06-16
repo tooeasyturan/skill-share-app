@@ -46,7 +46,7 @@ const AddComment = ({ values }: CommentsProps) => {
     };
 
     localStorage.setItem("meeting", JSON.stringify(updateLocalStorage));
-    writeComment(newComment);
+    // writeComment(newComment);
     // setMeeting("meeting", updateLocalStorage);
     dispatch({
       type: "update-comments",

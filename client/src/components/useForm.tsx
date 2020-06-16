@@ -10,7 +10,7 @@ type FormReturn = {
   handleFormSubmit: (e: any) => void;
 };
 
-const useForm = (formInput: MeetingInfo, callback): FormReturn => {
+const useForm = (formInput: any, callback): FormReturn => {
   const [values, setValues] = useState(formInput);
 
   const handleChange = (e: any) => {

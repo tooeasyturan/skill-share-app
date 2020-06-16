@@ -31,7 +31,7 @@ const MeetingInfo = () => {
   const { state, dispatch } = useContext(MeetingContext);
 
   const [meetings, setMeetings] = useState([]);
-  const [showAll, setShowAll] = useState(false);
+  const [showAll, setShowAll] = useState(true);
 
   function submit() {
     dispatch({ type: "add-meeting", payload: values });
@@ -93,5 +93,3 @@ const MeetingInfo = () => {
     </div>
   );
 };
-
-export default MeetingInfo;

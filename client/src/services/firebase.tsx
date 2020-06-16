@@ -19,10 +19,19 @@ export function writeMeeting(values) {
   }
 }
 
-export function writeComment(updatedComments) {
-  meetingsRef.child("-M9ceylsoE2_bbYkgphZ").update({
-    comments: updatedComments,
+export function writeComment(id, updatedComments) {
+  // var newPostKey = firebase.database().ref().child('posts').push().key;
+  meetingsRef.child(`${id}/comments`).push({
+    name: updatedComments.name,
+    comment: updatedComments.comment,
   });
+  // newCommentRef.set({
+  //   name: updatedComments.name,
+  //   comment: updatedComments.comment,
+  // });
+  // meetingsRef.child(id).update({
+  //   comments: updatedComments,
+  // });
 }
 
 export function readMeeting() {
@@ -35,4 +44,9 @@ export const queryMeeting = async (): Promise<any> => {
   const res = await meetingsRef.orderByKey().once("value");
   const snapshot = res.val();
   return Object.entries(snapshot);
+};
+
+export const queryByRef = async (id) => {
+  const res = await meetingsRef.child(id).once("value");
+  return res.val();
 };
