@@ -68,19 +68,8 @@ const AddComment2 = ({ values, meeting, id }) => {
   const addComment = (name: string, comment: string) => {
     const newComment = { name: name, comment: comment };
     let prevComments = state.comments;
-    // const meetingFromLocalStorage = getMeeting("meeting");
 
-    // const updateLocalStorage: {
-    //   meetingFromLocalStorage: string;
-    //   comments: Comments[];
-    // } = {
-    //   ...meetingFromLocalStorage,
-    //   comments: [...prevComments, newComment],
-    // };
-
-    // localStorage.setItem("meeting", JSON.stringify(updateLocalStorage));
     writeComment(id, newComment);
-    // setMeeting("meeting", updateLocalStorage);
     dispatch({
       type: "UPDATE_COMMENTS",
       payload: [...prevComments, ["", newComment]],

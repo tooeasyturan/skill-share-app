@@ -12,7 +12,7 @@ type MeetingViewProps = {
   handleFormSubmit: (e: any) => void;
 };
 
-const FormView = ({
+const MeetingView = ({
   values,
   handleChange,
   state,
@@ -81,4 +81,4 @@ const FormView = ({
   );
 };
 
-export default FormView;
+export default MeetingView;
