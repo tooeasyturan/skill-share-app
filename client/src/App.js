@@ -6,25 +6,22 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import firebase from "firebase";
 import app from "./config/firebase";
-import MeetingInfo from "./components/MeetingInfo";
-import MeetingInfo2 from "./components/MeetingInfo2";
+import Meetings from "./components/Meetings";
 
 import { MeetingProvider } from "./components/MeetingContext";
-import { MeetingProvider2 } from "./components/MeetingContext2";
 
 import Meeting from "./components/Meeting";
+import AddMeeting from "./components/AddMeeting";
 
 function App() {
   return (
-    <MeetingProvider2>
+    <MeetingProvider>
       <Router>
-        {/* <Route exact path='/' component={MeetingInfo} /> */}
-        <Route exact path='/' component={MeetingInfo2} />
-
-        <Route exact path='/:id' component={Meeting} />
-        {/* <MeetingInfo /> */}
+        <Route exact path='/' component={Meetings} />
+        <Route exact path='/meetings/:id' component={Meeting} />
+        <Route exact path='/addmeeting' component={AddMeeting} />
       </Router>
-    </MeetingProvider2>
+    </MeetingProvider>
   );
 }
 

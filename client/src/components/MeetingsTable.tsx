@@ -2,14 +2,20 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
+import { Meeting } from "../types.d";
 
-const MeetingsTable = ({ meeting, id }) => {
+interface MeetingsTableProps {
+  meeting: Meeting;
+  id: string;
+}
+
+const MeetingsTable = ({ meeting, id }: MeetingsTableProps) => {
   return (
     <tr>
       <td>{meeting.title}</td>
       <td>{meeting.presenter}</td>
       <td>{meeting.summary}</td>
-      <Link to={`/${id}`}>Details</Link>
+      <Link to={`/meetings/${id}`}>Details</Link>
     </tr>
   );
 };

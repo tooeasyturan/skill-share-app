@@ -15,23 +15,16 @@ export function writeMeeting(values) {
   if (!db.ref("meetings")) {
     db.ref("meetings").set(meetingData);
   } else {
-    db.ref("meetings").push(meetingData);
+    let newKey = db.ref("meetings").push(meetingData);
+    return newKey.key;
   }
 }
 
 export function writeComment(id, updatedComments) {
-  // var newPostKey = firebase.database().ref().child('posts').push().key;
   meetingsRef.child(`${id}/comments`).push({
     name: updatedComments.name,
     comment: updatedComments.comment,
   });
-  // newCommentRef.set({
-  //   name: updatedComments.name,
-  //   comment: updatedComments.comment,
-  // });
-  // meetingsRef.child(id).update({
-  //   comments: updatedComments,
-  // });
 }
 
 export function readMeeting() {
@@ -43,7 +36,9 @@ export function readMeeting() {
 export const queryMeeting = async (): Promise<any> => {
   const res = await meetingsRef.orderByKey().once("value");
   const snapshot = res.val();
-  return Object.entries(snapshot);
+  if (snapshot) {
+    return Object.entries(snapshot);
+  }
 };
 
 export const queryByRef = async (id) => {

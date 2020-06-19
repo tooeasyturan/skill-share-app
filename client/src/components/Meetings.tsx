@@ -1,12 +1,10 @@
 /** @format */
 
 import React, { useContext, useEffect, useState } from "react";
-import useForm from "./useForm";
-import MeetingView from "./MeetingView";
-import { MeetingContext2 } from "./MeetingContext2";
-import { getMeeting } from "./handleLocalStorage";
-import { readMeeting, queryMeeting } from "../services/firebase";
+import { queryMeeting } from "../services/firebase";
+import { MeetingContext } from "./MeetingContext";
 import MeetingsTable from "./MeetingsTable";
+import useForm from "./useForm";
 import { Link } from "react-router-dom";
 
 declare global {
@@ -22,19 +20,17 @@ const DEFAULT_MEETING = {
   comments: [],
 };
 
-const MeetingInfo2 = () => {
+const Meetings = () => {
   const { values, handleChange, handleFormSubmit } = useForm(
     DEFAULT_MEETING,
     submit
   );
 
-  const { state, dispatch } = useContext(MeetingContext2);
-  const meetings = state.state;
-
-  const [showAll, setShowAll] = useState(true);
+  const { state, dispatch } = useContext(MeetingContext);
 
   function submit() {
-    dispatch({ type: "add-meeting", payload: values });
+    console.log("need to update");
+    // dispatch({ type: "add-meeting", payload: values });
   }
 
   useEffect(() => {
@@ -54,13 +50,13 @@ const MeetingInfo2 = () => {
           <th>Presenter</th>
           <th>Summary</th>
         </tr>
-        {meetings && meetings.length > 1 ? (
+        {state && state.length > 0 ? (
           <>
-            {meetings.map((meeting) => (
+            {state.map((meetings) => (
               <MeetingsTable
-                key={meeting[0]}
-                id={meeting[0]}
-                meeting={meeting[1]}
+                key={meetings[0]}
+                id={meetings[0]}
+                meeting={meetings[1]}
               />
             ))}
           </>
@@ -68,8 +64,25 @@ const MeetingInfo2 = () => {
           <h1>Loading</h1>
         )}
       </table>
+      <Link to='/addmeeting'>Add Meeting</Link>
     </div>
   );
 };
 
-export default MeetingInfo2;
+export default Meetings;
+
+// {state.map((meetings) =>
+//   meetings.map((meeting) => {
+//     //what is going on here
+//     if (meeting[1]) {
+//       console.log("meeting!", meetings);
+//       return (
+//         <MeetingsTable
+//           key={meetings[0]}
+//           id={meetings[0]}
+//           meeting={meetings[1]}
+//         />
+//       );
+//     }
+//   })
+// )}

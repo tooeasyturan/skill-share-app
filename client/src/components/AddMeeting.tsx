@@ -1,28 +1,34 @@
 /** @format */
 
-import React from "react";
-import { MeetingInfo, MeetingState } from "../types.d";
-import AddComment from "./AddComment";
-import DeleteMeeting from "./DeleteMeeting";
+import React, { useContext } from "react";
+import { MeetingContext } from "./MeetingContext";
+import useForm from "./useForm";
+import { writeMeeting } from "../services/firebase";
 
-type MeetingViewProps = {
-  values: MeetingInfo;
-  state: MeetingState;
-  handleChange: (e: any) => void;
-  handleFormSubmit: (e: any) => void;
+const DEFAULT_MEETING = {
+  title: "",
+  presenter: "",
+  summary: "",
+
+  // comments: [],
+  // comment: "",
 };
 
-const MeetingView = ({
-  values,
-  handleChange,
-  state,
-  handleFormSubmit,
-}: MeetingViewProps) => {
-  const { title, presenter, summary } = state.meetingInfo;
+const AddMeeting = () => {
+  const { state, dispatch } = useContext(MeetingContext);
+  const { values, handleChange, handleFormSubmit } = useForm(
+    DEFAULT_MEETING,
+    submit
+  );
+
+  function submit() {
+    let key = writeMeeting(values);
+    dispatch({ type: "ADD_MEETING", payload: [key, values] });
+  }
 
   return (
     <div className='App'>
-      <form action=''>
+      <form onSubmit={handleFormSubmit}>
         <h1>Skill Sharing</h1>
         <div>
           <label htmlFor='user'>Your name:</label>
@@ -37,22 +43,6 @@ const MeetingView = ({
             />
           </span>
         </div>
-        {title !== "" ? (
-          <div>
-            <div>
-              <h1>Title: {title}</h1> <DeleteMeeting />
-              <p>
-                By: <strong>{presenter}</strong>
-              </p>
-              <p>Summary: {summary}</p>
-            </div>
-            <div>
-              <AddComment values={values} />
-            </div>
-          </div>
-        ) : (
-          <div></div>
-        )}
 
         <h2>Submit a talk</h2>
         <div>
@@ -75,10 +65,10 @@ const MeetingView = ({
             onChange={handleChange}
           />
         </div>
-        <button onClick={handleFormSubmit}>Submit</button>
+        <button type='submit'>Submit</button>
       </form>
     </div>
   );
 };
 
-export default MeetingView;
+export default AddMeeting;

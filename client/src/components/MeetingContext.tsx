@@ -1,60 +1,49 @@
 /** @format */
 
-import produce from "immer";
 import React, { createContext, useReducer } from "react";
-import { MeetingInfo, MeetingState } from "../types.d";
+import { MeetingState } from "../types.d";
 
 export const MeetingContext = createContext<MeetingContextType | undefined>(
   undefined
 );
 
 type MeetingContextType = {
-  state: MeetingState;
+  state: MeetingState[];
   dispatch: React.Dispatch<MeetingAction>;
 };
 
 export type MeetingAction =
-  | { type: "get-meeting"; payload: MeetingInfo }
-  | { type: "add-meeting"; payload: MeetingInfo }
-  | { type: "delete-meeting"; payload: any }
-  | { type: "update-comments"; payload: any }
-  | { type: "add-comment"; payload: string }
-  | { type: "clear-comment"; payload: string };
+  | { type: "GET_MEETINGS"; payload: MeetingState[] }
+  | { type: "ADD_MEETING"; payload: MeetingState };
 
-const initialState = {
-  meetingInfo: {
-    title: "",
-    presenter: "",
-    summary: "",
-    comments: [],
-  },
-  comment: "",
-};
+// const initialState = [
+//   [
+//     "",
+//     {
+//       presenter: "",
+//       summary: "",
+//       title: "",
+//     },
+//   ],
+// ];
 
-function reducer(state: MeetingState, action: MeetingAction): MeetingState {
+function reducer(state: MeetingState[], action: MeetingAction): MeetingState[] {
   switch (action.type) {
-    case "get-meeting":
-      return { ...state, meetingInfo: action.payload };
-    case "add-meeting":
-      return { ...state, meetingInfo: action.payload };
-    case "delete-meeting":
-      return initialState;
-    case "add-comment":
-      return { ...state, comment: action.payload };
-    case "update-comments":
-      return produce(state, (draft) => {
-        draft.meetingInfo.comments = action.payload;
-        draft.comment = "";
-      });
-    case "clear-comment":
-      return { ...state, comment: "" };
+    case "GET_MEETINGS":
+      return action.payload;
+    case "ADD_MEETING":
+      if (state) {
+        return [...state, action.payload];
+      }
     default:
       return state;
   }
 }
 
-export const MeetingProvider: React.FC<MeetingState> = (props): JSX.Element => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export const MeetingProvider: React.FC<MeetingState[] | MeetingState> = (
+  props
+): JSX.Element => {
+  const [state, dispatch] = useReducer(reducer, []);
 
   return (
     <MeetingContext.Provider value={{ state, dispatch }}>
