@@ -10,8 +10,9 @@ type FormReturn = {
   handleFormSubmit: (e: any) => void;
 };
 
-const useForm = (formInput: any, callback): FormReturn => {
+const useForm = (formInput: any, ...rest): FormReturn => {
   const [values, setValues] = useState(formInput);
+  const callback = rest[0];
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;

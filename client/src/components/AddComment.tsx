@@ -16,8 +16,6 @@ type AddComment = {
   comment: string;
 };
 
-type UpdateComments = [];
-
 type GetComments = [
   string,
   {
@@ -26,16 +24,29 @@ type GetComments = [
   }
 ];
 
+type CommentState = {
+  title: string;
+  presenter: string;
+  summary: string;
+  comments: any[];
+  comment: string;
+};
+
+type AddCommentProps = {
+  values: any;
+  meeting: CommentState;
+  id: string;
+};
+
 export type CommentAction =
   | { type: "GET_COMMENTS"; payload: GetComments[] }
-  | { type: "ADD_COMMENT"; payload: AddComment }
-  | { type: "UPDATE_COMMENTS"; payload: AddComment };
+  | { type: "ADD_COMMENT"; payload: string }
+  | { type: "UPDATE_COMMENTS"; payload: any };
 
-function reducer(state, action: any) {
+function reducer(state: CommentState, action: CommentAction) {
   switch (action.type) {
     case "GET_COMMENTS":
-      console.log("GET COMMENTS STATE", action.payload);
-
+      console.log("GET COMMENTS STATE", state);
       return { ...state, comments: action.payload };
     case "ADD_COMMENT":
       return { ...state, comment: action.payload };
@@ -50,10 +61,10 @@ function reducer(state, action: any) {
   }
 }
 
-const AddComment = ({ values, meeting, id }) => {
+const AddComment = ({ values, meeting, id }: AddCommentProps) => {
   const [state, dispatch] = useReducer(reducer, meeting);
 
-  let comments = meeting.meeting.comments;
+  const { comments } = meeting;
 
   useEffect(() => {
     getComments();
@@ -61,9 +72,7 @@ const AddComment = ({ values, meeting, id }) => {
 
   let getComments = () => {
     if (comments) {
-      console.log("COMMENTS", comments);
       let array: GetComments[] = Object.entries(comments);
-      console.log("ARRAY!", array);
       dispatch({ type: "GET_COMMENTS", payload: array });
     }
   };

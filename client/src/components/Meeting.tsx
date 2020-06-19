@@ -9,27 +9,18 @@ import { MeetingContext } from "./MeetingContext";
 import AddComment from "./AddComment";
 
 const DEFAULT_MEETING = {
-  meeting: {
-    title: "",
-    presenter: "",
-    summary: "",
-  },
+  title: "",
+  presenter: "",
+  summary: "",
+
   comments: [],
   comment: "",
 };
 
 const Meeting = (props) => {
-  const { values, handleChange, handleFormSubmit } = useForm(
-    DEFAULT_MEETING,
-    submit
-  );
+  const { values, handleChange } = useForm(DEFAULT_MEETING);
   const { state, dispatch } = useContext(MeetingContext);
   const [meeting, setMeeting] = useState(DEFAULT_MEETING);
-
-  function submit() {
-    console.log("need to update");
-    // dispatch({ type: "ADD_MEETING", payload: values });
-  }
 
   useEffect(() => {
     firebaseMeeting();
@@ -37,7 +28,7 @@ const Meeting = (props) => {
 
   const firebaseMeeting = async () => {
     const data = await queryByRef(props.match.params.id);
-    setMeeting({ ...DEFAULT_MEETING, meeting: data });
+    setMeeting(data);
   };
 
   return (
@@ -60,11 +51,11 @@ const Meeting = (props) => {
         {meeting ? (
           <div>
             <div>
-              <h1>Title: {meeting.meeting.title}</h1> <DeleteMeeting />
+              <h1>Title: {meeting.title}</h1> <DeleteMeeting />
               <p>
-                By: <strong>{meeting.meeting.presenter}</strong>
+                By: <strong>{meeting.presenter}</strong>
               </p>
-              <p>Summary: {meeting.meeting.summary}</p>
+              <p>Summary: {meeting.summary}</p>
             </div>
             <AddComment
               values={values}
@@ -75,29 +66,6 @@ const Meeting = (props) => {
         ) : (
           <div></div>
         )}
-
-        {/* <h2>Submit a talk</h2>
-        <div>
-          <label htmlFor='title'>Title:</label>
-          <input
-            type='text'
-            id='title'
-            name='title'
-            value={values.title}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='summary'>Summary:</label>
-          <input
-            type='text'
-            id='summary'
-            name='summary'
-            value={values.summary}
-            onChange={handleChange}
-          />
-        </div>
-        <button onClick={handleFormSubmit}>Submit</button> */}
       </form>
     </div>
   );
